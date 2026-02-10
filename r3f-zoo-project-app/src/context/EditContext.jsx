@@ -9,7 +9,7 @@ export const EditProvider = ({ children }) => {
   const [objects, setObject] = useState(initialData ? JSON.parse(initialData) : data);
   const [selectdeId, setSelectdeId] = useState();
   const [draggedPosition, setdRaggedPosition] = useState();
-  
+
   const setObj = (objects) => {
     setObject(objects);
     localStorage.setItem("objects", JSON.stringify(objects))
@@ -17,7 +17,7 @@ export const EditProvider = ({ children }) => {
 
   const onObjectClicked = (id) => (e) => {
     e.stopPropagation();
-    if (id && id === selectdeId) {
+    if (isEditMode && id && id === selectdeId) {
       transform();
       setSelectdeId(null);
       return;
@@ -82,7 +82,7 @@ export const EditProvider = ({ children }) => {
   };
   return (<EditContext.Provider value={value}>{children}</EditContext.Provider>)
 }
-const START_Y = 20;
+const START_Y = 50;
 const data = [
   {
     id: crypto.randomUUID(),

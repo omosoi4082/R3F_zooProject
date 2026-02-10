@@ -6,6 +6,7 @@ import { Physics, RigidBody } from '@react-three/rapier'
 import { Dion } from './Dino'
 import { EditContext } from '../context/EditContext'
 import { useFrame, useThree } from '@react-three/fiber'
+import { Rtanny } from './Rtanny'
 
 const py = 20;
 export const Environments = () => {
@@ -30,16 +31,22 @@ export const Environments = () => {
     <directionalLight intensity={4} position={[3, 3, 3]} />
     <OrbitControls />
     <Suspense>
-      <Physics >
-        <RigidBody type='fixed' colliders={"trimesh"} >
+      <Physics gravity={[0,-9.81,0]}>
+        <RigidBody 
+        name="land"
+        friction={3}  
+        type='fixed' 
+        colliders={"trimesh"} >
           <ZoonMap />
         </RigidBody>
+        
         {objects.map(({ id, ...object }) => (
           <Fragment key={id}>
             {object.type === "animal" ? (<Animal objId={id} onClick={onObjectClicked}{...object} />) 
             : (<Dion objId={id} onClick={onObjectClicked}{...object} />)}
           </Fragment>
         ))}
+        <Rtanny/>
       </Physics>
     </Suspense>
   </>)
