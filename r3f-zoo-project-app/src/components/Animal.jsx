@@ -13,7 +13,11 @@ export const Animal = ({ name, objId, onClick, position, ...props }) => {
   const { actions } = useAnimations(animations, group)
   const { isEditMode, selectdeId, draggedPosition } = useContext(EditContext)
   const isSelect = objId === selectdeId
-
+  scene.traverse((obj) => {
+    if (obj.isMesh) {
+      obj.castShadow = true;
+    }
+  })
   useEffect(() => { actions["Idle"].reset().play() })
 
   useFrame((state) => {

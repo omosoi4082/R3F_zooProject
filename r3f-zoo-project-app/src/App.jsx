@@ -5,6 +5,7 @@ import { EditProvider } from './context/EditContext'
 import { Overlay } from './components/overlay/Overlay'
 import { useMemo } from 'react';
 import { KeyboardControls } from '@react-three/drei';
+import { EffectComposer } from '@react-three/postprocessing';
 
 export const Controls = {
   forward: "forward",
@@ -25,8 +26,14 @@ function App() {
   return (
     <KeyboardControls map={map}>
       <EditProvider>
-        <Canvas camera={{ position: [10, 50, 50] }}>
+        <Canvas 
+        shadows
+        camera={{ 
+          
+          position: [160, 40, 150] }}
+        >
           <Environments />
+         
         </Canvas>
         <Overlay />
       </EditProvider>

@@ -24,10 +24,25 @@ export const Rtanny = () => {
   const { actions } = useAnimations(animations, group)
   const { isEditMode, selectdeId } = useContext(EditContext)
 
+  scene.traverse((obj) => {
+    if (obj.isMesh) {
+      obj.castShadow = true;
+    }
+  })
+  // useEffect(() => {
+  //   actions[animation].reset().play();
+  //   return () => actions[animation].fadeOut();
+  // }, [scene, animation]);
   useEffect(() => {
-    actions[animation].reset().play();
-    return () => actions[animation].fadeOut();
-  }, [scene, animation]);
+    const action = actions[animation];
+    if (!action) return;
+
+    action.reset().fadeIn(0.2).play();
+
+    return () => {
+      action.fadeOut(0.2);
+    };
+  }, [animation, actions]);
 
 
 
@@ -41,7 +56,7 @@ export const Rtanny = () => {
   const isKeyPressed = forwardPressed || leftPressed || rightPressed || backPressed;
 
   useFrame((state) => {
-    // if (!body.current || !group.current || !rtannyRef.current) return;
+    if (!body.current || !group.current || !rtannyRef.current) return;
     if (isEditMode) return;
     if (selectdeId) return;
 
@@ -93,7 +108,7 @@ export const Rtanny = () => {
   })
 
   return (
-    <group castShadow ref={group} position={[offset.x, offset.y, offset.z]}>
+    <group ref={group} position={[offset.x, offset.y, offset.z]}>
       <RigidBody
         ref={body}
         lockRotations
