@@ -19,8 +19,8 @@ export const Environments = () => {
       camera.position.z = 0;
     }
   })
-  const lightRef=useRef();
-  useHelper(lightRef,THREE.DirectionalLightHelper)
+  const lightRef = useRef();
+  useHelper(lightRef, THREE.DirectionalLightHelper)
   return (<>
     {isEditMode ? (
       <gridHelper
