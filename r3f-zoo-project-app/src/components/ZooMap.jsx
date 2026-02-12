@@ -7,7 +7,7 @@ export const ZoonMap = () => {
     if (obj.isMesh) {
       obj.receiveShadow = true;
       obj.castShadow = true;
-  
+
     }
   })
   return (

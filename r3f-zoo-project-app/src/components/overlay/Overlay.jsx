@@ -6,7 +6,7 @@ import { RotateRight } from "../icons/RotateRight"
 import { EditContext } from '../../context/EditContext'
 
 export const Overlay = () => {
-  const { isEditMode, SetEditmode, selectdeId, rotate ,setSelectdeId} = useContext(EditContext)
+  const { isEditMode, SetEditmode, selectdeId, rotate, setSelectdeId } = useContext(EditContext)
 
   return (
     <div className='overlay'>
@@ -16,7 +16,7 @@ export const Overlay = () => {
           <RotateRight onClick={() => rotate("right")} />
         </>
         ) : null}
-      {selectdeId ? <CloseIcon onClick={()=>setSelectdeId(null)}/> : null}
+      {selectdeId ? <CloseIcon onClick={() => setSelectdeId(null)} /> : null}
       <EditIcon onClick={() => { SetEditmode((prev) => !prev) }} />
     </div>
 

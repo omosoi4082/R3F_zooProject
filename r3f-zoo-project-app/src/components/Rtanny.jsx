@@ -19,7 +19,7 @@ export const Rtanny = () => {
   const body = useRef();
   const rtannyRef = useRef();
 
-  const [animation, setAnimation] = useState("Idle")
+  const [animation, setAnimation] = useState('Idle')
   const { scene, animations } = useGLTF(`/models/rtanny.glb`)
   const { actions } = useAnimations(animations, group)
   const { isEditMode, selectdeId } = useContext(EditContext)
@@ -38,7 +38,6 @@ export const Rtanny = () => {
     if (!action) return;
 
     action.reset().fadeIn(0.2).play();
-
     return () => {
       action.fadeOut(0.2);
     };

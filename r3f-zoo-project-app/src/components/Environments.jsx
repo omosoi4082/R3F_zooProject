@@ -46,7 +46,7 @@ export const Environments = () => {
       <Physics gravity={[0, -9.81, 0]}>
         <RigidBody
           name="land"
-          friction={3}
+          friction={5}
           type='fixed'
           colliders={"trimesh"} >
           <ZoonMap />

@@ -8,20 +8,39 @@ import * as THREE from "three"
 
 export const Animal = ({ name, objId, onClick, position, ...props }) => {
   const group = useRef();
+  const prevAnimation = useRef();
+
   const { scene, animations } = useGLTF(`/models/animals/${name}.glb`)
-  const clone = useMemo(() => SkeletonUtils.clone(scene))
-  const { actions } = useAnimations(animations, group)
+  const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
+  const { actions } = useAnimations(animations, clone)
   const { isEditMode, selectdeId, draggedPosition } = useContext(EditContext)
   const isSelect = objId === selectdeId
+
   scene.traverse((obj) => {
     if (obj.isMesh) {
       obj.castShadow = true;
     }
   })
-  useEffect(() => { actions["Idle"].reset().play() })
+  useEffect(() => {
+    if (!actions) return;
+    const nextAnimation = isSelect ? "Eating" : "Idle";
+    if (!actions[nextAnimation]) return;
+    const nextAction = actions[nextAnimation];
+    nextAction.reset().fadeIn(0.2).play();
+
+    if (
+      prevAnimation.current &&
+      prevAnimation.current !== nextAnimation
+    ) {
+      actions[prevAnimation.current]?.fadeOut(0.2);
+    }
+    prevAnimation.current = nextAnimation;
+
+  }, [isSelect, actions]);
+
 
   useFrame((state) => {
-    if (isSelect) {
+    if (isSelect && !isEditMode) {
       const [offsetX, offsetY, offsetZ] = position;
       const { x, y, z } = group.current.children[0].position;
       const realX = offsetX + x;
@@ -30,6 +49,7 @@ export const Animal = ({ name, objId, onClick, position, ...props }) => {
       state.camera.lookAt(realX, realY, realZ);
       state.camera.position.lerp(new THREE.Vector3(realX, realY + 10, realZ + 20), 0.05)
     }
+
   })
   return (
     <>

@@ -7,9 +7,10 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from "three"
 export const Dion = ({ name, objId, onClick, position, ...props }) => {
   const group = useRef();
+  const prevAnimation = useRef();
   const { scene, animations } = useGLTF(`/models/dinos/${name}.glb`)
-  const clone = useMemo(() => SkeletonUtils.clone(scene))
-  const { actions } = useAnimations(animations, group)
+  const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
+  const { actions } = useAnimations(animations, clone)
   const { isEditMode, selectdeId, draggedPosition, is } = useContext(EditContext)
   const isSelect = objId === selectdeId
   scene.traverse((obj) => {
@@ -18,10 +19,25 @@ export const Dion = ({ name, objId, onClick, position, ...props }) => {
     }
   })
   useEffect(() => {
-    actions[`Armature|${name}_Idle`].reset().play()
-  })
+
+    if (!actions) return;
+    const nextAnimation = isSelect ? `Armature|${name}_Attack` : `Armature|${name}_Idle`;
+    if (!actions[nextAnimation]) return;
+    const nextAction = actions[nextAnimation];
+    nextAction.reset().fadeIn(0.2).play();
+
+    if (
+      prevAnimation.current &&
+      prevAnimation.current !== nextAnimation
+    ) {
+      actions[prevAnimation.current]?.fadeOut(0.2);
+    }
+    prevAnimation.current = nextAnimation;
+
+  }, [isSelect, actions]);
+
   useFrame((state) => {
-    if (isSelect) {
+    if (isSelect && !isEditMode) {
       const [offsetX, offsetY, offsetZ] = position;
       const { x, y, z } = group.current.children[0].position;
       const realX = offsetX + x;

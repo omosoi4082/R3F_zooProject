@@ -26,14 +26,13 @@ function App() {
   return (
     <KeyboardControls map={map}>
       <EditProvider>
-        <Canvas 
-        shadows
-        camera={{ 
-          
-          position: [160, 40, 150] }}
+        <Canvas
+          shadows
+          camera={{
+            position: [160, 40, 150]
+          }}
         >
           <Environments />
-         
         </Canvas>
         <Overlay />
       </EditProvider>
